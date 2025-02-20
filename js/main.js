@@ -418,21 +418,20 @@ $(document).ready(function () {
       }
     }
   
-    submitBtn.on("click", submitAnswers);
+    submitBtn.on("click", displayResults);
   
-    function submitAnswers() {
-        $.ajax({
-            url: "https://cors-anywhere.herokuapp.com/https://script.google.com/macros/s/AKfycbxU9ezxWOl8Yj7oKzD8HMHKr9kHH8PCvSjChVJ6BJJHNvq7Ywi0GjZ2---QpYSrIs0/exec",
-            type: "POST",
-            contentType: "application/json",
-            data: JSON.stringify(userAnswers),
-            success: function (response) {
-              alert("Your answers have been submitted!");
-            },
-            error: function (error) {
-              alert("Error submitting answers.");
-            }
+    function displayResults() {
+        $("#quizContainer").addClass("d-none");
+        $("#resultContainer").removeClass("d-none");
+        $("#timer").text('45:00');
+
+        clearInterval(timerInterval);
+    
+        let resultsTable = $("#resultsTable");
+        resultsTable.empty();
+        questions.forEach((q, index) => {
+          resultsTable.append(`<tr><td>${index + 1}</td><td>${q.question}</td><td>${userAnswers[q.id] || "No Answer"}</td></tr>`);
         });
-    }
+      }
   });
   
