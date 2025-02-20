@@ -68,7 +68,7 @@ const questions = [
   {
     id: 'question-6',
     question:
-      "Which jQuery method is used to get the value of a selected &lt;input&gt; field?",
+      "Which jQuery method is used to get the value of a selected <input> field?",
     type: "radio",
     options: [
       { text: ".val()", option: "A" },
@@ -326,7 +326,7 @@ const questions = [
   {
     id: 'question-30',
     question:
-      "Which jQuery selector selects all &lt;p&gt; elements inside a &lt;div&gt;?",
+      "Which jQuery selector selects all <p> elements inside a <div>?",
     type: "radio",
     options: [
       { text: '$("div p")', option: "A" },
@@ -334,6 +334,111 @@ const questions = [
       { text: '$("div, p")', option: "C" },
       { text: '$("div+p")', option: "D" },
     ],
+  },
+  {
+    id: 'question-31',
+    question: "Use case of git rebase and git rebase interactive in one line",
+    type: "text",
+  },
+
+  {
+    id: 'question-32',
+    question: "What is the difference between git pull and git merge in one line",
+    type: "text",
+  },
+
+  {
+    id: 'question-33',
+    question: "Which ways can you revert a commit you pushed accidentally?",
+    type: "text",
+  },
+
+  {
+    id: 'question-34',
+    question: "How to edit a commit message in one line?",
+    type: "text",
+  },
+
+  {
+    id: 'question-35',
+    question: "Git reflog vs git log",
+    type: "text",
+  },
+
+  {
+    id: 'question-36',
+    question: "Which attribute is used to group related form controls?",
+    type: "radio",
+    options: [
+      { text: "name", option: "A" },
+      { text: "form", option: "B" },
+      { text: "fieldset", option: "C" },
+      { text: "group", option: "D" },
+    ],
+  },
+
+  {
+    id: 'question-37',
+    question: "What is the novalidate attribute?",
+    type: "text",
+  },
+
+  {
+    id: 'question-38',
+    question: 'The enctype="multipart/form-data" is required when uploading files via a form. (True/False)',
+    type: "radio",
+    options: [
+      { text: "True", option: "A" },
+      { text: "False", option: "B" },
+    ],
+  },
+
+  {
+    id: 'question-39',
+    question: "Disabled vs readonly",
+    type: "text",
+  },
+
+  {
+    id: 'question-40',
+    question: "Datalist vs select?",
+    type: "text",
+  },
+
+  {
+    id: 'question-41',
+    question: "What is the purpose of the DOCTYPE declaration in HTML?",
+    type: "text",
+  },
+
+  {
+    id: 'question-42',
+    question: "What is the difference between local storage and session storage?",
+    type: "text",
+  },
+
+  {
+    id: 'question-43',
+    question: "What are meta tags in HTML, and why are they important?",
+    type: "text",
+  },
+
+  {
+    id: 'question-44',
+    question: "How does z-index property work?",
+    type: "radio",
+    options: [
+      { text: "Defines the stack order of elements", option: "A" },
+      { text: "Sets the visibility of an element", option: "B" },
+      { text: "Controls the height of an element", option: "C" },
+      { text: "Applies to only positioned elements", option: "D" },
+    ],
+  },
+
+  {
+    id: 'question-45',
+    question: "What is the difference between inline, external, and internal CSS? Explain in one line and give one advantage and disadvantage of each.",
+    type: "text",
   },
 ];
 
@@ -435,4 +540,3 @@ $(document).ready(function () {
         });
       }
   });
-  
