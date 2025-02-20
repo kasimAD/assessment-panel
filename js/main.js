@@ -427,6 +427,7 @@ $(document).ready(function () {
 
         clearInterval(timerInterval);
     
+        $('#username-wrapper').text(userAnswers['name'])
         let resultsTable = $("#resultsTable");
         resultsTable.empty();
         questions.forEach((q, index) => {
