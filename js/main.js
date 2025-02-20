@@ -337,58 +337,102 @@ const questions = [
   },
 ];
 
-let timerInterval;
-const quizContainer = document.getElementById("quiz");
-const introContainer = document.getElementById("intro");
 
-document.getElementById("startBtn").addEventListener("click", function () {
-  startTimer(45 * 60, document.getElementById("timer"));
-  introContainer.classList.add("d-none");
-  quizContainer.classList.remove("d-none");
-  this.disabled = true;
-});
+$(document).ready(function () {
+    const userAnswers = {};
+    const quizContainer = $("#quiz");
+    const introContainer = $("#intro");
+    const submitBtn = $("#submitBtn");
+    const timerDisplay = $("#timer");
+    const modal = new bootstrap.Modal($("#timeoutModal")[0]);
+    let timerInterval;
+  
+    $("#startBtn").on("click", function () {
+        let username = $('#username').val()
+        
+        if (!username) {
+            return alert('Please provide your name before starting your assessment');
+        }
 
-function startTimer(duration, display) {
-  let timer = duration,
-    minutes,
-    seconds;
-  timerInterval = setInterval(function () {
-    minutes = Math.floor(timer / 60);
-    seconds = timer % 60;
-
-    seconds = seconds < 10 ? "0" + seconds : seconds;
-    display.textContent = minutes + ":" + seconds;
-
-    if (--timer < 0) {
-      clearInterval(timerInterval);
-      display.textContent = "Time's Up!";
-    }
-  }, 1000);
-}
-
-questions.forEach((q, index) => {
-  const questionDiv = document.createElement("div");
-  questionDiv.classList.add("question", "shadow-sm", "p-3");
-
-  questionDiv.innerHTML = `<h5 class="mb-3">Q${index + 1}: ${q.question}</h5>`;
-
-  if (q.type === "text") {
-    questionDiv.innerHTML += `<textarea rows="5" class="form-control mt-2"></textarea>`;
-  } else if (q.type === "radio" || q.type === "checkbox") {
-    const optionsDiv = document.createElement("div");
-    optionsDiv.classList.add("options", "mt-2");
-    q.options.forEach((option) => {
-      const label = document.createElement("label");
-      label.classList.add("form-check-label");
-      label.innerHTML = `<input type="${q.type}" class="form-check-input" name="question_${index}" value="${option.option}"> ${option.option}. ${option.text}`;
-
-      const div = document.createElement("div");
-      div.classList.add("form-check");
-      div.appendChild(label);
-      optionsDiv.appendChild(div);
+        userAnswers['name'] = username
+        startTimer(45 * 60, timerDisplay);
+        introContainer.addClass("d-none");
+        quizContainer.removeClass("d-none");
+        $(this).prop("disabled", true);
     });
-    questionDiv.appendChild(optionsDiv);
-  }
-
-  quizContainer.appendChild(questionDiv);
-});
+  
+    function startTimer(duration, display) {
+      let timer = duration;
+      timerInterval = setInterval(() => {
+        let minutes = Math.floor(timer / 60);
+        let seconds = timer % 60;
+        display.text(`${minutes}:${seconds < 10 ? "0" : ""}${seconds}`);
+        
+        if (--timer < 0) {
+          clearInterval(timerInterval);
+          display.text("Time's Up!");
+          modal.show();
+        }
+      }, 1000);
+    }
+  
+    // Create questions dynamically
+    questions.forEach((q, index) => {
+      const questionDiv = $('<div class="question shadow-sm p-3"></div>');
+      questionDiv.append(`<h5 class="mb-3">Q${index + 1}: ${q.question}</h5>`);
+  
+      if (q.type === "text") {
+        const textarea = $('<textarea rows="5" class="form-control mt-2"></textarea>');
+        textarea.on("input", function () {
+          saveAnswer(q.id, $(this).val());
+        });
+        questionDiv.append(textarea);
+      } else {
+        const optionsDiv = $('<div class="options mt-2"></div>');
+        q.options.forEach((option) => {
+          const label = $('<label class="form-check-label"></label>');
+          label.html(
+            `<input type="${q.type}" class="form-check-input" name="question_${index}" value="${option.option}"> ${option.option}. ${option.text}`
+          );
+          label.find("input").on("change", function () {
+            saveAnswer(q.id, $(this).val());
+          });
+          const div = $('<div class="form-check"></div>');
+          div.append(label);
+          optionsDiv.append(div);
+        });
+        questionDiv.append(optionsDiv);
+      }
+  
+      quizContainer.append(questionDiv);
+    });
+  
+    function saveAnswer(questionId, value) {
+      userAnswers[questionId] = value;
+      checkCompletion();
+    }
+  
+    function checkCompletion() {
+      if (Object.keys(userAnswers).length === questions.length) {
+        submitBtn.removeClass("d-none");
+      }
+    }
+  
+    submitBtn.on("click", submitAnswers);
+  
+    function submitAnswers() {
+      $.ajax({
+        url: "https://script.google.com/macros/s/AKfycbyPWbEpInr5QoBbba_x3Ba-JcY_ROUmAxZuadHUTd_-X1b5u01jMZz38S2UMAZYBxU/exec",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(userAnswers),
+        success: function () {
+          alert("Your answers have been submitted!");
+        },
+        error: function () {
+          alert("Error submitting answers.");
+        }
+      });
+    }
+  });
+  
